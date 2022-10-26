@@ -17,8 +17,9 @@ class ToDosFixtures extends Fixture implements OrderedFixtureInterface
         $faker = Factory::create();
         foreach (range(1, self::DEFAULT_TODOS_COUNT) as $i) {
             $todo = new ToDo();
-            $todo->setTitle('Todo ' . $i);
-            $todo->setDescription('Description ' . $i);
+            $todo->setTitle($faker->text(128));
+            $todo->setDescription($faker->paragraph(3));
+            $todo->setDue($faker->dateTimeBetween('+1 days', '+3 months'));
 
             $tagNames = $faker->randomElements(TagsFixtures::DEFAULT_TAGS, $faker->numberBetween(1, 3));
             foreach ($tagNames as $tagName) {
