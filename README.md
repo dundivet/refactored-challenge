@@ -66,6 +66,9 @@ package "ToDo Proyect" {
 ```shell
 composer install --optimize-autoloaders
 
+php bin/console doctrine:database:create
+php bin/console doctrine:migrations:migrate --no-interaction
+php bin/console doc:fixtures:load --no-interaction --purge-with-truncate
 ```
 ## Docker
 

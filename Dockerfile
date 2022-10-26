@@ -30,3 +30,9 @@ RUN echo '\
     CustomLog /var/log/apache2/access.log combined\n\
 </VirtualHost>\n\
 ' > /etc/apache2/sites-enabled/000-default.conf
+
+RUN apt-get update
+
+RUN apt-get install -y \
+    libpq-dev \
+    && docker-php-ext-install -j$(nproc) pgsql pdo_pgsql opcache
