@@ -34,6 +34,8 @@ package "ToDo Proyect" {
 @enduml
 ```
 
+![class model](./doc/imgs/class-model.png)
+
 Sin embargo, para hacer un uso más práctico de los ToDo, se podría desarrollar una estructura en la que los propios ToDo fuesen sub-tareas de un ToDo padre y que al mismo tiempo tengan el mismo comportamiento de un ToDo independiente. Por lo que podrían adicionar sub-tareas, completarlos, etc. La propuesta quedaría de la siguiente forma:
 
 ```plantuml
@@ -60,6 +62,8 @@ package "ToDo Proyect" {
 }
 @enduml
 ```
+
+![class model](./doc/imgs/class-model-refactored.png)
 
 ## Instrucciones de instalación
 
