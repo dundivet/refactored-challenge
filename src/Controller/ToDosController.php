@@ -3,50 +3,45 @@
 namespace App\Controller;
 
 use App\Entity\ToDo;
+use App\Handler\ToDoHandler;
+use App\Manager\ToDoManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\VarDumper\Cloner\Data;
 
 class ToDosController extends AbstractController
 {
-    #[Route('/api/todos', name: 'todos')]
-    public function index(EntityManagerInterface $entityManager): JsonResponse
+    #[Route('/api/todos', name: 'todos', methods: ['GET'])]
+    public function index(ToDoHandler $handler): JsonResponse
     {
-        $todos = $entityManager->getRepository(ToDo::class)->findAll();
-        
-        return $this->json($todos, Response::HTTP_OK);
+        return $handler->handle();
     }
 
-    #[Route('/api/todo', name: 'todos_create', methods: ['POST'])]
-    public function create(Request $request): JsonResponse
+    #[Route('/api/todos', name: 'todos_create', methods: ['POST'])]
+    public function create(ToDoHandler $handler): JsonResponse
     {
-        return $this->json([], Response::HTTP_CREATED);
+        return $handler->handle();
     }
 
-    #[Route('/api/todo/{id}', name: 'todos_with_parent', methods: ['POST'])]
-    public function withParent(Request $request): JsonResponse
+    #[Route('/api/todos/{id<\d+>}', name: 'todos_update', methods: ['PUT'])]
+    public function update(int $id, ToDoHandler $handler): JsonResponse
     {
-        return $this->json([], Response::HTTP_CREATED);
+        return $handler->handle($id);
     }
 
-    #[Route('/api/todo/{id}', name: 'todos_update', methods: ['PUT'])]
-    public function update(int $id, Request $request): JsonResponse
+    #[Route('/api/todos/{id<\d+>}', name: 'todo_complete', methods: ['PATCH'])]
+    public function complete(int $id, ToDoHandler $handler): JsonResponse
     {
-        return $this->json([], Response::HTTP_ACCEPTED);
+        return $handler->handle($id);
     }
 
-    #[Route('/api/todo/{id}', name: 'todo_complete', methods: ['PATCH'])]
-    public function complete(int $id, Request $request): JsonResponse
+    #[Route('/api/todos/{id<\d+>}', name: 'todo_delete', methods: ['DELETE'])]
+    public function delete(int $id, ToDoHandler $handler): JsonResponse
     {
-        return $this->json([], Response::HTTP_NO_CONTENT);
-    }
-
-    #[Route('/api/todo/{id}', name: 'todo_delete', methods: ['DELETE'])]
-    public function delete(int $id, Request $request): JsonResponse
-    {
-        return $this->json([], Response::HTTP_NO_CONTENT);
+        return $handler->handle($id);
     }
 }

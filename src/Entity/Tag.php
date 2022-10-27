@@ -16,9 +16,6 @@ class Tag
     #[ORM\Column(length: 32)]
     private ?string $name = null;
 
-    #[ORM\ManyToOne(inversedBy: 'tags')]
-    private ?ToDo $toDo = null;
-
     public function getId(): ?int
     {
         return $this->id;
@@ -32,18 +29,6 @@ class Tag
     public function setName(string $name): self
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getToDo(): ?ToDo
-    {
-        return $this->toDo;
-    }
-
-    public function setToDo(?ToDo $toDo): self
-    {
-        $this->toDo = $toDo;
 
         return $this;
     }

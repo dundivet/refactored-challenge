@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\ToDo;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query\Expr;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -37,6 +38,20 @@ class ToDoRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    public function findByQuery(?string $query): array
+    {
+        $queryBuilder = $this->createQueryBuilder('todo');
+        if (null !== $query) {
+            $queryBuilder->where($queryBuilder->expr()->orX(
+                $queryBuilder->expr()->like('todo.title', ':query'),
+                $queryBuilder->expr()->like('todo.description', ':query')
+            ))
+            ->setParameter('query', sprintf('%%%s%%', $query));
+        }
+
+        return $queryBuilder->getQuery()->getResult();
     }
 
 //    /**
