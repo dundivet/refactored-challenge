@@ -66,6 +66,16 @@
         ],
         "post-update-cmd": [
             "@auto-scripts"
+        ],
+        "clean-test": [
+            "rm -rf var/cache/test/*",
+            "php bin/console doctrine:database:create",
+            "php bin/console doctrine:schema:create",
+            "php bin/console doctrine:fixtures:load --no-interaction"
+        ],
+        "test": [
+            "@clean-test",
+            "php bin/phpunit --testdox"
         ]
     },
     "conflict": {

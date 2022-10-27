@@ -39,6 +39,18 @@ class TagRepository extends ServiceEntityRepository
         }
     }
 
+    public function findByQuery(?string $query): array
+    {
+        $queryBuilder = $this->createQueryBuilder('tag');
+        if (null !== $query && '' !== $query) {
+            $queryBuilder
+                ->where($queryBuilder->expr()->like('tag.name', ':query'))
+                ->setParameter('query', sprintf('%%%s%%', $query));
+        }
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
 //    /**
 //     * @return Tag[] Returns an array of Tag objects
 //     */

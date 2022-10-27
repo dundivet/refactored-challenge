@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Tag;
+use App\Handler\TagHandler;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -12,17 +13,15 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class TagsController extends AbstractController
 {
-    #[Route('/api/tags', name: 'tags')]
-    public function index(EntityManagerInterface $entityManager): JsonResponse
+    #[Route('/api/tags', name: 'tags', methods: ['GET'])]
+    public function index(TagHandler $handler): JsonResponse
     {
-        $tags = $entityManager->getRepository(Tag::class)->findAll();
-
-        return $this->json($tags, Response::HTTP_OK);
+        return $handler->handle();
     }
 
-    #[Route('/api/tag', name: 'tags_create', methods: ['POST'])]
-    public function create(Request $request): JsonResponse
+    #[Route('/api/tags', name: 'tags_create', methods: ['POST'])]
+    public function create(TagHandler $handler): JsonResponse
     {
-        return $this->json([], Response::HTTP_CREATED);
+        return $handler->handle();
     }
 }

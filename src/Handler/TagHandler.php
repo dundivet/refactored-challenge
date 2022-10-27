@@ -1,20 +1,19 @@
-<?php
+<?php 
 
 namespace App\Handler;
-
-use App\Entity\ToDo;
-use App\Manager\ToDoManager;
+use App\Entity\Tag;
+use App\Manager\TagManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class ToDoHandler extends AbstractHandler
+class TagHandler extends AbstractHandler
 {
-    private ToDoManager $manager;
+    private TagManager $manager;
 
-    public function __construct(ToDoManager $manager, RequestStack $requestStack, SerializerInterface $serializer)
+    public function __construct(TagManager $manager, RequestStack $requestStack, SerializerInterface $serializer)
     {
         parent::__construct($requestStack, $serializer);
 
@@ -23,12 +22,12 @@ class ToDoHandler extends AbstractHandler
 
     public function handle(?int $id = null): Response
     {
-        $toDo = null;
+        $tag = null;
         if (null !== $id) {
-            $toDo = $this->manager->findById($id);
-            if (null === $toDo) {
+            $tag = $this->manager->findById($id);
+            if (null === $tag) {
                 return new JsonResponse([
-                    'error' => 'ToDo with id \''.$id.'\' was not found',
+                    'error' => 'Tag with id \''.$id.'\' was not found',
                     'code' => 404
                 ], Response::HTTP_NOT_FOUND);
             }
@@ -40,7 +39,7 @@ class ToDoHandler extends AbstractHandler
                 return $this->handleSearch($request);
             case Request::METHOD_POST:
             case Request::METHOD_PUT:
-                if ($response = $this->handleUpdate($request, $toDo)) {
+                if ($response = $this->handleUpdate($request, $tag)) {
                     return $response;
                 }
 
@@ -58,19 +57,19 @@ class ToDoHandler extends AbstractHandler
 
     private function handleSearch(Request $request): ?JsonResponse
     {
-        $todos = $this->manager->search($request->query->get('query', null));
+        $tags = $this->manager->search($request->query->get('query', null));
 
-        $json = $this->toJson($todos);
+        $json = $this->toJson($tags);
         return new JsonResponse($json, Response::HTTP_OK, [], true);
     }
 
-    private function handleUpdate(Request $request, ?ToDo $toDo = null): ?JsonResponse
+    private function handleUpdate(Request $request, ?Tag $tag = null): ?JsonResponse
     {
-        $toDoObj = $this->fromJson($request->getContent(), ToDo::class);
+        $tagObj = $this->fromJson($request->getContent(), Tag::class);
 
-        if ($toDoObj = $this->manager->update($toDoObj, $toDo)) {
-            $json = $this->toJson($toDoObj);
-            $statusCode = null !== $toDo ? Response::HTTP_ACCEPTED : Response::HTTP_CREATED;
+        if ($tagObj = $this->manager->update($tagObj, $tag)) {
+            $json = $this->toJson($tagObj);
+            $statusCode = null !== $tag ? Response::HTTP_ACCEPTED : Response::HTTP_CREATED;
 
             return new JsonResponse($json, $statusCode, [], true);
         }

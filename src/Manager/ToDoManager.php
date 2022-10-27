@@ -8,16 +8,11 @@ use App\Repository\ToDoRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Psr\Log\LoggerInterface;
 
-class ToDoManager
+class ToDoManager extends AbstractManager
 {
-    private ToDoRepository $repository;
-
-    private LoggerInterface $logger;
-
     public function __construct(ToDoRepository $repository, LoggerInterface $logger)
     {
-        $this->repository = $repository;
-        $this->logger = $logger;
+        parent::__construct($repository, $logger);
     }
 
     public function search(?string $query): array
@@ -65,14 +60,14 @@ class ToDoManager
             
             return $toDoObj;
         } catch (\Exception $e) {
-            $this->logger->error(sprintf('An error occurred while creating a new ToDo. Details: %s', $e->getMessage()));
+            $this->logger->error(sprintf('An error occurred while updating ToDo entity. Details: %s', $e->getMessage()));
         }
 
         return null;
     }
 
-    public function getRepository(): ToDoRepository
+    public function findById(int $id): ?ToDo
     {
-        return $this->repository;
+        return $this->repository->find($id);
     }
 }
