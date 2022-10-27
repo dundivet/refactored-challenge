@@ -59,7 +59,7 @@ class ToDosTest extends WebTestCase
         $faker = Factory::create();
 
         $client = static::createClient();
-        $client->request(Request::METHOD_PUT, '/api/todos/21', [], [], [], json_encode([
+        $client->request(Request::METHOD_PUT, '/api/todos/10', [], [], [], json_encode([
             'title' => $faker->text(128),
             'description' => $faker->paragraph(3),
             'due' => $faker->dateTimeBetween('now', '+1 year')->format('Y-m-d H:i:s'),
@@ -74,7 +74,7 @@ class ToDosTest extends WebTestCase
         $faker = Factory::create();
 
         $client = static::createClient();
-        $client->request(Request::METHOD_PATCH, '/api/todos/21');
+        $client->request(Request::METHOD_PATCH, '/api/todos/10');
 
         $this->assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
     }
@@ -84,7 +84,7 @@ class ToDosTest extends WebTestCase
         $faker = Factory::create();
 
         $client = static::createClient();
-        $client->request(Request::METHOD_DELETE, '/api/todos/21');
+        $client->request(Request::METHOD_DELETE, '/api/todos/10');
 
         $this->assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
     }

@@ -44,13 +44,12 @@ class ToDoHandler
             case Request::METHOD_GET:
                 return $this->handleSearch($request);
             case Request::METHOD_POST:
-                if ($response = $this->handleCreate($request)) {
+            case Request::METHOD_PUT:
+                if ($response = $this->handleUpdate($request, $toDo)) {
                     return $response;
                 }
 
                 break;
-            case Request::METHOD_PUT:
-                return new JsonResponse([], Response::HTTP_ACCEPTED);
             case Request::METHOD_PATCH:
                 return new JsonResponse([], Response::HTTP_NO_CONTENT);
             case Request::METHOD_DELETE:
@@ -72,18 +71,18 @@ class ToDoHandler
         return new JsonResponse($json, Response::HTTP_OK, [], true);
     }
 
-    private function handleCreate(Request $request): ?JsonResponse
+    private function handleUpdate(Request $request, ?ToDo $toDo = null): ?JsonResponse
     {
         $toDoObj = $this->serializer->deserialize($request->getContent(), ToDo::class, 'json', [
             DateTimeNormalizer::FORMAT_KEY => 'Y-m-d H:i:s',
         ]);
 
-        if ($newToDo = $this->manager->create($toDoObj)) {
-            $json = $this->serializer->serialize($newToDo, 'json', [
+        if ($toDoObj = $this->manager->update($toDoObj, $toDo)) {
+            $json = $this->serializer->serialize($toDoObj, 'json', [
                 DateTimeNormalizer::FORMAT_KEY => 'Y-m-d H:i:s',
             ]);
 
-            return new JsonResponse($json, Response::HTTP_CREATED, [], true);
+            return new JsonResponse($json, null !== $toDo ? Response::HTTP_ACCEPTED : Response::HTTP_CREATED, [], true);
         }
 
         return null;

@@ -5,6 +5,7 @@ namespace App\Manager;
 use App\Entity\Tag;
 use App\Entity\ToDo;
 use App\Repository\ToDoRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Psr\Log\LoggerInterface;
 
 class ToDoManager
@@ -24,12 +25,45 @@ class ToDoManager
         return $this->repository->findByQuery($query);
     }
 
-    public function create(ToDo $newToDo): ?ToDo
+    public function update(ToDo $toDoObj, ? ToDo $toDo = null): ? ToDo
     {
         try {
-            $this->repository->save($newToDo, true);
+            if (null !== $toDo) {
+                if ($toDo->getTitle() !== $toDoObj->getTitle()) {
+                    $toDo->setTitle($toDoObj->getTitle());
+                }
+                if ($toDo->getDescription() !== $toDoObj->getDescription()) {
+                    $toDo->setDescription($toDoObj->getDescription());
+                }
+                if ($toDo->getDue() !== $toDoObj->getDue()) {
+                    $toDo->setDue($toDoObj->getDue());
+                }
 
-            return $newToDo;
+                if (null !== $toDoObj->getParent()) {
+                    $toDo->setParent($toDoObj->getParent());
+                }
+
+                $oldTags = new ArrayCollection($toDo->getTags()->toArray());
+                foreach ($toDoObj->getTags() as $tag) {
+                    if (!$toDo->getTags()->contains($tag)) {
+                        $toDo->addTag($tag);
+                    } else {
+                        $oldTags->removeElement($tag);
+                    }
+                }
+
+                foreach ($oldTags as $tag) {
+                    $toDo->removeTag($tag);
+                }
+
+                $this->repository->save($toDo, true);
+
+                return $toDo;
+            }
+
+            $this->repository->save($toDoObj, true);
+            
+            return $toDoObj;
         } catch (\Exception $e) {
             $this->logger->error(sprintf('An error occurred while creating a new ToDo. Details: %s', $e->getMessage()));
         }
