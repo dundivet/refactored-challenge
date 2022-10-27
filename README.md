@@ -1,5 +1,7 @@
 # Programming Challenge
 
+[![Build Status](https://app.travis-ci.com/dundivet/refactored-challenge.svg?branch=main)](https://app.travis-ci.com/dundivet/refactored-challenge)
+
 ## Resumen
 
 Como se sugiere en el enunciado del problema es posible crear una estructura siguiendo el modelo siguiente:
