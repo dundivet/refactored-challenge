@@ -66,6 +66,19 @@ class ToDoManager extends AbstractManager
         return null;
     }
 
+    public function remove(ToDo $toDoObj): bool
+    {
+        try {
+            $this->repository->remove($toDoObj, true);
+
+            return true;
+        } catch (\Exception $e) {
+            $this->logger->error(sprintf('An error occurred while deleting ToDo entity. Details: %s', $e->getMessage()));
+        }
+
+        return false;
+    }
+
     public function findById(int $id): ?ToDo
     {
         return $this->repository->find($id);

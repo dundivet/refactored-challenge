@@ -48,7 +48,10 @@ class ToDoHandler extends AbstractHandler
             case Request::METHOD_PATCH:
                 return new JsonResponse([], Response::HTTP_NO_CONTENT);
             case Request::METHOD_DELETE:
-                return new JsonResponse([], Response::HTTP_NO_CONTENT);
+                if ($response = $this->handleDelete($request, $toDo)) {
+                    return $response;
+                }
+                break;
             default:
                 return new JsonResponse([], Response::HTTP_OK);
         }
@@ -73,6 +76,15 @@ class ToDoHandler extends AbstractHandler
             $statusCode = null !== $toDo ? Response::HTTP_ACCEPTED : Response::HTTP_CREATED;
 
             return new JsonResponse($json, $statusCode, [], true);
+        }
+
+        return null;
+    }
+
+    private function handleDelete(Request $request, ToDo $todo): ?JsonResponse
+    {
+        if ($this->manager->remove($todo)) {
+            return new JsonResponse([], Response::HTTP_NO_CONTENT);
         }
 
         return null;
