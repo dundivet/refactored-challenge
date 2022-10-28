@@ -2,16 +2,10 @@
 
 namespace App\Controller;
 
-use App\Entity\ToDo;
 use App\Handler\ToDoHandler;
-use App\Manager\ToDoManager;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\VarDumper\Cloner\Data;
 
 class ToDosController extends AbstractController
 {
