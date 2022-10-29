@@ -51,6 +51,8 @@ class ToDoRepository extends ServiceEntityRepository
             ->setParameter('query', sprintf('%%%s%%', $query));
         }
 
+        $queryBuilder->orderBy('todo.due', 'ASC');
+
         return $queryBuilder->getQuery()->getResult();
     }
 

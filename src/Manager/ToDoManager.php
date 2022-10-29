@@ -2,7 +2,6 @@
 
 namespace App\Manager;
 
-use App\Entity\Tag;
 use App\Entity\ToDo;
 use App\Repository\ToDoRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -74,6 +73,21 @@ class ToDoManager extends AbstractManager
             return true;
         } catch (\Exception $e) {
             $this->logger->error(sprintf('An error occurred while deleting ToDo entity. Details: %s', $e->getMessage()));
+        }
+
+        return false;
+    }
+
+    public function complete(ToDo $toDoObj): bool
+    {
+        
+        try {
+            $toDoObj->setCompleted(true);
+            $this->repository->save($toDoObj, true);
+
+            return true;
+        } catch (\Exception $e) {
+            $this->logger->error(sprintf('An error occurred while completing ToDo entity. Details: %s', $e->getMessage()));
         }
 
         return false;

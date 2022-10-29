@@ -3,7 +3,7 @@ export default class Router {
     static GET = 'get';
     static POST = 'post';
     static PUT = 'put';
-    static PATCH = 'put';
+    static PATCH = 'patch';
     static DELETE = 'delete';
 
     static routes = {

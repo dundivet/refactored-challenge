@@ -15,26 +15,39 @@ import { ToDosHelper, LoaderHelper } from './helpers';
 import { ToDos as ToDosAPI } from './api';
 
 class App {
+    #loading = false;
 
     constructor() {
-        document.addEventListener(ToDosAPI.PRE_FETCH_EVENT, () => {
-            ToDosHelper.hide();
-            LoaderHelper.show();
-        });
-        document.addEventListener(ToDosAPI.COMPLETE_FETCH_EVENT, () => {
-            ToDosHelper.show();
-            ToDosHelper.setEvents();
+        this.toggleLoading = this.toggleLoading.bind(this);
+        document.addEventListener(ToDosAPI.PRE_FETCH_EVENT, this.toggleLoading, false);
+        document.addEventListener(ToDosAPI.POST_FETCH_EVENT, this.toggleLoading, false);
 
-            LoaderHelper.hide();
-        });
-
-        window.addEventListener(ToDosAPI.COMPLETE_DELETE_EVENT, this.onDelete, false);
+        document.addEventListener(ToDosAPI.POST_DELETE_EVENT, this.#onDelete, false);
+        document.addEventListener(ToDosAPI.POST_COMPLETE_EVENT, this.#onComplete, false);
 
         ToDosAPI.fetchAll();
     }
 
-    onDelete (event) {
+    toggleLoading() {
+        if (!this.#loading) {
+            ToDosHelper.hide();
+            LoaderHelper.show();
+
+            this.#loading = true;
+        } else {
+            ToDosHelper.show();
+            ToDosHelper.setEvents();
+
+            LoaderHelper.hide();
+            this.#loading = false;
+        }
+    }
+
+    #onDelete (event) {
         ToDosHelper.remove(event.detail.id);
+    }
+    #onComplete (event) {
+        ToDosHelper.complete(event.detail.id);
     }
 }
 
