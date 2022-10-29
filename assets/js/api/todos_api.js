@@ -1,5 +1,5 @@
-import Request from './request';
-import { ToDosHelper } from './helpers';
+import Request from '../common/request';
+import { ToDosHelper } from '../helpers';
 
 export class ToDos {
     static PRE_FETCH_EVENT = 'todos.pre_fetch';

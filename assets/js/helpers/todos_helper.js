@@ -1,4 +1,4 @@
-import { ToDos } from "./api";
+import { ToDos } from "../api";
 
 export class ToDosHelper {
     static TEMPLATE = `<div class="list-group-item d-flex align-items-center gap-3 py-3">
@@ -87,20 +87,5 @@ export class ToDosHelper {
             el.classList.add('text-muted', 'text-decoration-line-through');
             el.querySelector('input[type="checkbox"]').setAttribute('disabled', 'disabled');
         }
-    }
-}
-
-export class LoaderHelper {
-    static SELECTOR = 'div.loader';
-    static LOADER = document.querySelector(LoaderHelper.SELECTOR);
-
-    static show() {
-        LoaderHelper.LOADER.classList.remove('d-none');
-        LoaderHelper.LOADER.classList.add('d-block');
-    }
-
-    static hide() {
-        LoaderHelper.LOADER.classList.remove('d-block');
-        LoaderHelper.LOADER.classList.add('d-none');
     }
 }
