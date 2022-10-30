@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title 'Show ToDo' %}
+
+{% block body %}
+	<div class="row justify-content-center">
+		<div class="col-8">
+			<h2>{{todo.title}}</h2>
+			<div>
+				{% for tag in todo.tags %}
+					<span class="badge bg-primary">{{tag.name}}</span>
+				{% endfor %}
+			</div>
+			<h6 class="mt-2">{{todo.due ? todo.due | date : '-'}}</h6>
+			<p>{{todo.description}}</p>
+
+			<a href="javascript:history.back()" class="btn btn-secondary">Go back</a>
+
+			<h4 class="mt-4 d-flex justify-content-between">
+				<spam>Tasks</spam>
+				<a href="{{ path('todos_add_with_parent', {id: todo.id}) }}" class="btn btn-success btn-sm">Add Task</a>
+			</h4>
+			<hr>
+			{% for subt in todo.subtasks %}
+				{% include 'default/_todo_item.html.twig' with {'todo': subt} %}
+			{% else %}
+				<h6 class="text-muted">No subtasks</h6>
+			{% endfor %}
+		</div>
+	</div>
+
+{% endblock %}
+

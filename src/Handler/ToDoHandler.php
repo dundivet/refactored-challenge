@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Serializer\Context\Normalizer\ObjectNormalizerContextBuilder;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class ToDoHandler extends AbstractHandler
@@ -65,8 +66,12 @@ class ToDoHandler extends AbstractHandler
     private function handleSearch(Request $request): ?JsonResponse
     {
         $todos = $this->manager->search($request->query->get('query', null));
+        
+        $context = (new ObjectNormalizerContextBuilder())
+            ->withGroups(['list'])
+            ->toArray();
 
-        $json = $this->toJson($todos);
+        $json = $this->toJson($todos, $context);
         return new JsonResponse($json, Response::HTTP_OK, [], true);
     }
 

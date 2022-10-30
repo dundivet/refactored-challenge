@@ -1,5 +1,5 @@
 
-export default class Router {
+export class Router {
     static GET = 'get';
     static POST = 'post';
     static PUT = 'put';
@@ -7,6 +7,7 @@ export default class Router {
     static DELETE = 'delete';
 
     static routes = {
+        // api
         'api_todos': {
             path: '/api/todos',
             method: Router.GET
@@ -26,6 +27,15 @@ export default class Router {
         'api_todos_delete': {
             path: '/api/todos/{id}',
             method: Router.DELETE
+        },
+        // public interface
+        'todos_add': {
+            path: '/todos/add',
+            method: Router.GET
+        },
+        'todos_show': {
+            path: '/todos/{id}',
+            method: Router.GET
         }
     };
 

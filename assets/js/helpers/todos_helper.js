@@ -1,14 +1,14 @@
 import * as bootstrap from 'bootstrap';
 
 import { ToDos } from "../api";
-import { DeleteModal } from "../common";
+import { DeleteModal, Router } from "../common";
 
 export class ToDosHelper {
     static TEMPLATE = `<div class="list-group-item d-flex align-items-center gap-3 py-3">
 	<input class="form-check-input flex-shrink-0" type="checkbox" value="" data-entity=":id:" style="font-size: 1.375em;">
 	<div class="d-flex gap-2 w-100 justify-content-between align-items-center">
 		<div>
-			<h6 class="mb-0"><a>:title:</a></h6>
+			<h6 class="mb-0"><a class="title-anchor text-decoration-none">:title:</a></h6>
 			<div class="tags"></div>
 			<p class="mb-0 opacity-75">:description:</p>
             <small class="opacity-50 text-nowrap">:due:</small>
@@ -39,6 +39,9 @@ export class ToDosHelper {
 
         const template = document.createElement('template');
         template.innerHTML = todoHtml;
+
+        const anchor = template.content.querySelector('.title-anchor');
+        anchor.setAttribute('href', Router.generate('todos_show', {id: todo.id}));
 
         const divTags = template.content.firstChild.querySelector('div.tags');
         for(const t of todo.tags) {

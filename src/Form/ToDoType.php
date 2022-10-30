@@ -26,10 +26,10 @@ class ToDoType extends AbstractType
                 'required' => false,
                 'widget' => 'single_text',
             ])
-            ->add('parent', EntityType::class, [
-                'required' => false,
-                'class' => ToDo::class,
-            ])
+            // ->add('parent', EntityType::class, [
+            //     'required' => false,
+            //     'class' => ToDo::class,
+            // ])
             ->add('tags', EntityType::class, [
                 'class' => Tag::class,
                 'multiple' => true,

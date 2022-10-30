@@ -7,6 +7,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation as Serialize;
+
 
 #[ORM\Entity(repositoryClass: ToDoRepository::class)]
 class ToDo
@@ -14,18 +16,23 @@ class ToDo
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Serialize\Groups(['list', 'default', 'ToDo'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Serialize\Groups(['list', 'default', 'ToDo'])]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Serialize\Groups(['list', 'default', 'ToDo'])]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Serialize\Groups(['list', 'default', 'ToDo'])]
     private ?\DateTimeInterface $due = null;
 
     #[ORM\Column(nullable: true)]
+    #[Serialize\Groups(['list', 'default', 'ToDo'])]
     private ?bool $completed = null;
 
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'subtasks')]
@@ -35,6 +42,7 @@ class ToDo
     private Collection $subtasks;
 
     #[ORM\ManyToMany(targetEntity: Tag::class)]
+    #[Serialize\Groups(['list', 'default', 'ToDo'])]
     private Collection $tags;
 
 

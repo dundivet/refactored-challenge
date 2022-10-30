@@ -1,4 +1,4 @@
-import Request from '../common/request';
+import { Request } from '../common';
 import { ToDosHelper } from '../helpers';
 
 export class ToDos {

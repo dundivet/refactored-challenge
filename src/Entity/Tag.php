@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\TagRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation as Serialize;
 
 #[ORM\Entity(repositoryClass: TagRepository::class)]
 class Tag
@@ -11,9 +12,11 @@ class Tag
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Serialize\Groups(['list', 'Default', 'Tag'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 32)]
+    #[Serialize\Groups(['list', 'Default', 'Tag'])]
     private ?string $name = null;
 
     public function getId(): ?int

@@ -1,6 +1,6 @@
-import Router from './router';
+import { Router } from './router';
 
-export default class Request {
+export class Request {
 
     static exec(route, vars = {}, data = {}) {
         const options = {

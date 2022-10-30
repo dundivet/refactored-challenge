@@ -40,7 +40,7 @@ class ToDoRepository extends ServiceEntityRepository
         }
     }
 
-    public function findByQuery(?string $query): array
+    public function findByQuery(?string $query, bool $onlyRoot=true): array
     {
         $queryBuilder = $this->createQueryBuilder('todo');
         if (null !== $query && '' !== $query) {
@@ -49,6 +49,10 @@ class ToDoRepository extends ServiceEntityRepository
                 $queryBuilder->expr()->like('todo.description', ':query')
             ))
             ->setParameter('query', sprintf('%%%s%%', $query));
+        }
+
+        if ($onlyRoot) {
+            $queryBuilder->andWhere($queryBuilder->expr()->isNull('todo.parent'));
         }
 
         $queryBuilder->orderBy('todo.due', 'ASC');
