@@ -12,11 +12,11 @@ class Tag
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Serialize\Groups(['list', 'Default', 'Tag'])]
+    #[Serialize\Groups(['basic', 'Default', 'Tag'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 32)]
-    #[Serialize\Groups(['list', 'Default', 'Tag'])]
+    #[Serialize\Groups(['basic', 'Default', 'Tag'])]
     private ?string $name = null;
 
     public function getId(): ?int

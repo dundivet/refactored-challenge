@@ -3,9 +3,11 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>
-			{% block title %}ZChallenge!{% endblock %}
+			{% block title %}ZChallenge!
+			{% endblock %}
 		</title>
-		<link rel="icon" href="{{ asset('build/images/zonitel-32x32.png') }}">
+		<link
+		rel="icon" href="{{ asset('build/images/zonitel-32x32.png') }}">
 		{# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
 		{% block stylesheets %}
 			{{ encore_entry_link_tags('app') }}
@@ -16,8 +18,13 @@
 		{% endblock %}
 	</head>
 	<body>
-		<div class="container">
-            {% block body %}{% endblock %}
-        </div>
-    </body>
+		{% block body %}
+			<div class="container">
+				{% include 'layout/_header.html.twig' %}
+
+				{% block container %}{% endblock %}
+			</div>
+		{% endblock %}
+	</body>
 </html>
+

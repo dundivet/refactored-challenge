@@ -4,6 +4,15 @@ security:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     providers:
+        chain_provider: 
+            chain:
+                providers: [in_memory, app_user_provider]
+        in_memory:
+            memory:
+                users:
+                    admin@example:
+                        password: $2y$13$LZaZbXRfxn9tkXRxv2M5Qu1yCdiDWz2NS3SHahY77Nw93jgaae0J6
+                        roles: ROLE_ADMIN
         # used to reload user from session & other features (e.g. switch_user)
         app_user_provider:
             entity:
@@ -13,10 +22,22 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+        # api:
+        #     pattern: ^/api
+        #     lazy: true
+        #     provider: app_user_provider
+        #     json_login:
+        #         check_path: api_login
         main:
+            pattern: ^/
             lazy: true
-            provider: app_user_provider
-
+            provider: chain_provider
+            form_login:
+                login_path: app_login
+                check_path: app_login
+                enable_csrf: true
+            logout:
+                path: app_logout
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
 
@@ -26,8 +47,12 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/login$, roles: PUBLIC_ACCESS }
+        - { path: ^/, roles: ROLE_USER }
+        # - { path: ^/api, roles: ROLE_USER }
+
+    role_hierarchy:
+        ROLE_ADMIN: ROLE_USER
 
 when@test:
     security:
@@ -41,3 +66,10 @@ when@test:
                 cost: 4 # Lowest possible value for bcrypt
                 time_cost: 3 # Lowest possible value for argon
                 memory_cost: 10 # Lowest possible value for argon
+        providers:
+            in_memory:
+                memory:
+                    users:
+                        test@example:
+                            password: $2y$04$xPOCDBr/szbjDXK.TkftRe0.b38CbK5yKqi4py8UXBxoT6oMuJBTy
+                            roles: ROLE_USER

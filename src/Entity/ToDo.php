@@ -39,7 +39,7 @@ class ToDo
     #[Serialize\Groups(['show', 'Default', 'ToDo'])]
     private ?self $parent = null;
 
-    #[ORM\OneToMany(mappedBy: 'parent', targetEntity: self::class)]
+    #[ORM\OneToMany(mappedBy: 'parent', targetEntity: self::class, cascade: ['persist', 'remove'])]
     private Collection $subtasks;
 
     #[ORM\ManyToMany(targetEntity: Tag::class)]
