@@ -9,6 +9,7 @@ export class ToDosHelper {
 	<div class="d-flex gap-2 w-100 justify-content-between align-items-center">
 		<div>
 			<h6 class="mb-0"><a>:title:</a></h6>
+			<div class="tags"></div>
 			<p class="mb-0 opacity-75">:description:</p>
             <small class="opacity-50 text-nowrap">:due:</small>
 		</div>
@@ -38,6 +39,14 @@ export class ToDosHelper {
 
         const template = document.createElement('template');
         template.innerHTML = todoHtml;
+
+        const divTags = template.content.firstChild.querySelector('div.tags');
+        for(const t of todo.tags) {
+            const badge = document.createElement('div');
+            badge.classList.add('badge', 'bg-primary'); 
+            badge.innerText = t.name;
+            divTags.appendChild(badge);
+        }
 
         if (todo.completed) {
             ToDosHelper.setCompleted(template);
@@ -101,15 +110,25 @@ export class ToDosHelper {
     }
 
     static setCompleted(el) {
+        let checkbox, parentEl, badges;
         if (el instanceof HTMLTemplateElement) {
-            const checkbox = el.content.querySelector('input[type="checkbox"]');
-            checkbox.checked = true;
-            checkbox.setAttribute('disabled', 'disabled');
-            const parentEl = el.content.firstChild;
-            parentEl.classList.add('text-muted', 'text-decoration-line-through');
+            checkbox = el.content.querySelector('input[type="checkbox"]');
+            parentEl = el.content.firstChild;
+            badges = el.content.querySelectorAll('.badge');
         } else {
-            el.classList.add('text-muted', 'text-decoration-line-through');
-            el.querySelector('input[type="checkbox"]').setAttribute('disabled', 'disabled');
+            checkbox = el.querySelector('input[type="checkbox"]');
+            parentEl = el;
+            badges = el.querySelectorAll('.badge');
         }
+
+        checkbox.checked = true;
+        checkbox.setAttribute('disabled', 'disabled');
+
+        parentEl.classList.add('text-muted', 'text-decoration-line-through');
+
+        badges.forEach((el) => {
+            el.classList.remove('bg-primary');
+            el.classList.add('bg-secondary');
+        });
     }
 }
