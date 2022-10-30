@@ -91,11 +91,13 @@ export class ToDosHelper {
     static completeEvent(el) {
         // complete event
         const checkbox = el.querySelector('input[type="checkbox"]')
-        checkbox.addEventListener('click', (e) => {
-            if(checkbox.checked) {
-                ToDos.complete(checkbox.dataset.entity);
-            }
-        });
+        if (null !== checkbox) {
+            checkbox.addEventListener('click', (e) => {
+                if(checkbox.checked) {
+                    ToDos.complete(checkbox.dataset.entity);
+                }
+            });
+        }
     }
 
     static removeAll() {

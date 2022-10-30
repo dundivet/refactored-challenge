@@ -11,10 +11,16 @@ export class ToDos {
     static PRE_COMPLETE_EVENT = 'todos.pre_complete';
     static POST_COMPLETE_EVENT = 'todos.post_complete';
    
-    static fetchAll() {
+    static fetchAll(query = null) {
         document.dispatchEvent(new CustomEvent(ToDos.PRE_FETCH_EVENT));
 
-        const response = Request.exec('api_todos');
+        let response;
+        if (null !== query && '' !== query) {
+            response = Request.exec('api_todos', {}, { query: query });
+        } else {
+            response = Request.exec('api_todos');
+        }
+
         response.then((todos) => {
             ToDosHelper.removeAll();
 

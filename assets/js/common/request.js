@@ -10,12 +10,20 @@ export class Request {
                 'Content-Type': 'application/json'
             }
         };
+        let url = Router.generate(route, vars);
 
-        if (Object.entries(data).length > 0 && Router.get(route).method !== Request.GET) {
-            options.body = JSON.stringify(data);
+        if (Object.entries(data).length > 0) {
+            switch (Router.get(route).method) {
+                case Router.GET:
+                    url += '?' + new URLSearchParams(data).toString();
+                    break;
+                default:
+                    options.body = JSON.stringify(data);
+                    break;
+            }
         }
 
-        return fetch(Router.generate(route, vars), options)
+        return fetch(url, options)
             .then(r => {
                 if (r.status === 204) {
                     return {success: true, status: r.status};

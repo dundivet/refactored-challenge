@@ -13,7 +13,7 @@
 			<p class="mb-0 opacity-75">{{todo.description}}</p>
 			<small class="opacity-50 text-nowrap">{{todo.due ? todo.due | date : '-'}}</small>
 		</div>
-		<a href="#delete" data-entity=":id:">
+		<a href="#delete" data-entity="{{ todo.id }}">
 			<i class="fas fa-trash text-danger fa-xl"></i>
 		</a>
 	</div>

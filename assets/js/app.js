@@ -14,7 +14,7 @@ import 'bootstrap';
 import { ToDosHelper, LoaderHelper } from './helpers';
 import { ToDos as ToDosAPI } from './api';
 
-class App {
+export default class App {
     #loading = false;
 
     constructor() {
@@ -25,7 +25,7 @@ class App {
         document.addEventListener(ToDosAPI.POST_DELETE_EVENT, this.#onDelete, false);
         document.addEventListener(ToDosAPI.POST_COMPLETE_EVENT, this.#onComplete, false);
 
-        ToDosAPI.fetchAll();
+        // ToDosAPI.fetchAll();
         // const add_btn = document.getElementById('#add_btn');
         // add_btn.addEventListener('click', ToDosAPI.create, false);
     }
@@ -45,6 +45,10 @@ class App {
         }
     }
 
+    fetchAll(query = null) {
+        ToDosAPI.fetchAll(query);
+    }
+
     #onDelete (event) {
         ToDosHelper.remove(event.detail.id);
     }
@@ -53,6 +57,7 @@ class App {
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    const app = new App();
-});
+// document.addEventListener('DOMContentLoaded', () => {
+//     const app = new App();
+//     app.fetchAll();
+// });

@@ -43,10 +43,14 @@ class ToDoRepository extends ServiceEntityRepository
     public function findByQuery(?string $query, bool $onlyRoot=true): array
     {
         $queryBuilder = $this->createQueryBuilder('todo');
+
         if (null !== $query && '' !== $query) {
-            $queryBuilder->where($queryBuilder->expr()->orX(
+            $queryBuilder
+            ->leftJoin('todo.tags', 'tag')
+            ->where($queryBuilder->expr()->orX(
                 $queryBuilder->expr()->like('todo.title', ':query'),
-                $queryBuilder->expr()->like('todo.description', ':query')
+                $queryBuilder->expr()->like('todo.description', ':query'),
+                $queryBuilder->expr()->like('tag.name', ':query')
             ))
             ->setParameter('query', sprintf('%%%s%%', $query));
         }
