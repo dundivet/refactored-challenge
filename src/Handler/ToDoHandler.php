@@ -68,7 +68,7 @@ class ToDoHandler extends AbstractHandler
         $todos = $this->manager->search($request->query->get('query', null));
         
         $context = (new ObjectNormalizerContextBuilder())
-            ->withGroups(['list'])
+            ->withGroups(['basic'])
             ->toArray();
 
         $json = $this->toJson($todos, $context);
@@ -80,7 +80,11 @@ class ToDoHandler extends AbstractHandler
         $toDoObj = $this->fromJson($request->getContent(), ToDo::class);
 
         if ($toDoObj = $this->manager->update($toDoObj, $toDo)) {
-            $json = $this->toJson($toDoObj);
+            $context = (new ObjectNormalizerContextBuilder())
+            ->withGroups(['show', 'parent' => 'basic'])
+            ->toArray();
+
+            $json = $this->toJson($toDoObj, $context);
             $statusCode = null !== $toDo ? Response::HTTP_ACCEPTED : Response::HTTP_CREATED;
 
             return new JsonResponse($json, $statusCode, [], true);

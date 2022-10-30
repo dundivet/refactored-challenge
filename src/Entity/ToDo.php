@@ -16,33 +16,34 @@ class ToDo
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Serialize\Groups(['list', 'default', 'ToDo'])]
+    #[Serialize\Groups(['basic', 'show', 'Default', 'ToDo'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Serialize\Groups(['list', 'default', 'ToDo'])]
+    #[Serialize\Groups(['basic', 'show', 'Default', 'ToDo'])]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Serialize\Groups(['list', 'default', 'ToDo'])]
+    #[Serialize\Groups(['basic', 'show', 'Default', 'ToDo'])]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Serialize\Groups(['list', 'default', 'ToDo'])]
+    #[Serialize\Groups(['basic', 'show', 'Default', 'ToDo'])]
     private ?\DateTimeInterface $due = null;
 
     #[ORM\Column(nullable: true)]
-    #[Serialize\Groups(['list', 'default', 'ToDo'])]
+    #[Serialize\Groups(['basic', 'show', 'Default', 'ToDo'])]
     private ?bool $completed = null;
 
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'subtasks')]
+    #[Serialize\Groups(['show', 'Default', 'ToDo'])]
     private ?self $parent = null;
 
     #[ORM\OneToMany(mappedBy: 'parent', targetEntity: self::class)]
     private Collection $subtasks;
 
     #[ORM\ManyToMany(targetEntity: Tag::class)]
-    #[Serialize\Groups(['list', 'default', 'ToDo'])]
+    #[Serialize\Groups(['basic', 'show', 'Default', 'ToDo'])]
     private Collection $tags;
 
 
