@@ -76,8 +76,21 @@ php bin/console doctrine:database:create
 php bin/console doctrine:migrations:migrate --no-interaction
 php bin/console doc:fixtures:load --no-interaction --purge-with-truncate
 ```
-## Docker
+
+## Usando Docker
 
 ```shell
 docker compose up -d
+docker compose exec web php bin/console doctrine:database:create
+docker compose exec web php bin/console doctrine:migrations:migrate --no-interaction
+docker compose exec web php bin/console doc:fixtures:load --no-interaction --purge-with-truncate
+```
+
+## Credenciales de acceso
+
+Como parte del entorno de pruebas desarrollado al generar los `Fixtures` se genera un usuario `Admin` específico para el entorno de desarrollo y pruebas:
+
+```
+username/email: admin@example
+password: adminpass
 ```
