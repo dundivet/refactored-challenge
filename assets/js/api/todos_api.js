@@ -26,6 +26,10 @@ export class ToDos {
         });
     }
 
+    static create() {
+        
+    }
+
     static delete(id) {
         document.dispatchEvent(new CustomEvent(ToDos.PRE_DELETE_EVENT));
 

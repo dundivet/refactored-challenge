@@ -1,4 +1,7 @@
+import * as bootstrap from 'bootstrap';
+
 import { ToDos } from "../api";
+import { DeleteModal } from "../common";
 
 export class ToDosHelper {
     static TEMPLATE = `<div class="list-group-item d-flex align-items-center gap-3 py-3">
@@ -44,22 +47,43 @@ export class ToDosHelper {
     }
 
     static setEvents() {
-        const collection = document
-            .querySelectorAll('.list-group-item');
+        const collection = document.querySelectorAll('.list-group-item');
+        collection.forEach((el) => {
+            ToDosHelper.deleteEvent(el);
+            ToDosHelper.completeEvent(el);
+        });
+    }
 
-        for (const el of collection) {
-            const delete_btn = el.querySelector('a[href="#delete"]');
-            delete_btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                ToDos.delete(delete_btn.dataset.entity);
-            });
-            const checkbox = el.querySelector('input[type="checkbox"]')
-            checkbox.addEventListener('click', (e) => {
-                if(checkbox.checked) {
-                    ToDos.complete(checkbox.dataset.entity);
-                }
-            });
-        }
+    static deleteEvent(el) {
+        const delete_btn = el.querySelector('a[href="#delete"]');
+        const delete_modal = DeleteModal.getModal('Delete ToDo', 'Are you sure you want to delete this ToDo?');
+        const bs_modal = new bootstrap.Modal(delete_modal);
+
+        delete_btn.addEventListener('click', (e) => {
+            document.querySelector('body').appendChild(delete_modal);
+            bs_modal.show();
+        });
+
+        delete_modal.querySelector('button.btn-danger').addEventListener('click', (e) => {
+            e.preventDefault();
+
+            ToDos.delete(delete_btn.dataset.entity);
+            bs_modal.hide();
+        });
+
+        delete_modal.addEventListener('hidden.bs.modal', (e) => {
+            delete_modal.remove();
+        });
+    }
+
+    static completeEvent(el) {
+        // complete event
+        const checkbox = el.querySelector('input[type="checkbox"]')
+        checkbox.addEventListener('click', (e) => {
+            if(checkbox.checked) {
+                ToDos.complete(checkbox.dataset.entity);
+            }
+        });
     }
 
     static removeAll() {

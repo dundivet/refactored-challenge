@@ -905,6 +905,13 @@
   resolved "https://registry.yarnpkg.com/@discoveryjs/json-ext/-/json-ext-0.5.7.tgz#1d572bfbbe14b7704e0ba0f39b74815b84870d70"
   integrity sha512-dBVuXR082gk3jsFp7Rd/JI4kytwGHecnCoTtXFb7DB6CNHp4rg5k1bhg0nWdLGLnOV71lmDzGQaLMy8iPLY0pw==
 
+"@eonasdan/tempus-dominus@^6.2.6":
+  version "6.2.6"
+  resolved "https://registry.yarnpkg.com/@eonasdan/tempus-dominus/-/tempus-dominus-6.2.6.tgz#f581c96c8ec59a0ad1c81d9d0354b7e337b5a393"
+  integrity sha512-tEwhPut4WZ88Zs7y1a1HRbQZ4kyu9mQpXdhLcn9bLSaDZnntZzY9r5lPdMSrZ1m2iDvL9CQS+Kv2hvvNvoSE5A==
+  optionalDependencies:
+    "@popperjs/core" "^2.10.1"
+
 "@fortawesome/fontawesome-free@^6.2.0":
   version "6.2.0"
   resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-free/-/fontawesome-free-6.2.0.tgz#ba3510825b332816fe7190f28827f8cb33a298b5"
@@ -1002,7 +1009,7 @@
     error-stack-parser "^2.0.0"
     string-width "^4.2.3"
 
-"@popperjs/core@^2.11.6":
+"@popperjs/core@^2.10.1", "@popperjs/core@^2.11.6":
   version "2.11.6"
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.6.tgz#cee20bd55e68a1720bdab363ecf0c821ded4cd45"
   integrity sha512-50/17A98tWUfQ176raKiOGXuYpLyyVMkxxG6oylzL3BPOlA6ADGdK7EYunSa4I064xerltq9TGXs8HmOk5E+vw==

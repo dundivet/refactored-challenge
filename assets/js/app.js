@@ -26,6 +26,8 @@ class App {
         document.addEventListener(ToDosAPI.POST_COMPLETE_EVENT, this.#onComplete, false);
 
         ToDosAPI.fetchAll();
+        // const add_btn = document.getElementById('#add_btn');
+        // add_btn.addEventListener('click', ToDosAPI.create, false);
     }
 
     toggleLoading() {
