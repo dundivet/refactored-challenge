@@ -46,6 +46,10 @@ class ToDo
     #[Serialize\Groups(['basic', 'show', 'Default', 'ToDo'])]
     private Collection $tags;
 
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $owner = null;
+
 
     public function __construct()
     {
@@ -169,5 +173,17 @@ class ToDo
     public function __toString(): string
     {
         return $this->title;
+    }
+
+    public function getOwner(): ?User
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(?User $owner): self
+    {
+        $this->owner = $owner;
+
+        return $this;
     }
 }

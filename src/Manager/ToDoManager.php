@@ -6,12 +6,17 @@ use App\Entity\ToDo;
 use App\Repository\ToDoRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Security\Core\Security;
 
 class ToDoManager extends AbstractManager
 {
-    public function __construct(ToDoRepository $repository, LoggerInterface $logger)
+    private Security $security;
+
+    public function __construct(ToDoRepository $repository, Security $security, LoggerInterface $logger)
     {
         parent::__construct($repository, $logger);
+
+        $this->security = $security;
     }
 
     public function search(?string $query): array
@@ -55,8 +60,10 @@ class ToDoManager extends AbstractManager
                 return $toDo;
             }
 
+            $toDoObj->setOwner($this->security->getUser());
+
             $this->repository->save($toDoObj, true);
-            
+
             return $toDoObj;
         } catch (\Exception $e) {
             $this->logger->error(sprintf('An error occurred while updating ToDo entity. Details: %s', $e->getMessage()));

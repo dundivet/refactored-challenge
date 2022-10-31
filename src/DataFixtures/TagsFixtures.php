@@ -26,6 +26,6 @@ class TagsFixtures extends Fixture implements OrderedFixtureInterface
 
     public function getOrder(): int
     {
-        return 100;
+        return 200;
     }
 }

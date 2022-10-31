@@ -6,6 +6,7 @@ use App\Entity\ToDo;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query\Expr;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * @extends ServiceEntityRepository<ToDo>
@@ -17,9 +18,13 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ToDoRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private Security $security;
+
+    public function __construct(ManagerRegistry $registry, Security $security)
     {
         parent::__construct($registry, ToDo::class);
+
+        $this->security = $security;
     }
 
     public function save(ToDo $entity, bool $flush = false): void
@@ -43,11 +48,15 @@ class ToDoRepository extends ServiceEntityRepository
     public function findByQuery(?string $query, bool $onlyRoot=true): array
     {
         $queryBuilder = $this->createQueryBuilder('todo');
+        $queryBuilder
+            ->innerJoin('todo.owner', 'owner')
+            ->where($queryBuilder->expr()->eq('owner.email', ':owner'))
+            ->setParameter('owner', $this->security->getUser()->getUserIdentifier());
 
         if (null !== $query && '' !== $query) {
             $queryBuilder
             ->leftJoin('todo.tags', 'tag')
-            ->where($queryBuilder->expr()->orX(
+            ->andWhere($queryBuilder->expr()->orX(
                 $queryBuilder->expr()->like('todo.title', ':query'),
                 $queryBuilder->expr()->like('todo.description', ':query'),
                 $queryBuilder->expr()->like('tag.name', ':query')

@@ -81,7 +81,7 @@ php bin/console doc:fixtures:load --no-interaction --purge-with-truncate
 
 ```shell
 docker compose up -d
-docker compose exec web sh -c "composer install && yarn install && yarn build"
+docker compose exec web sh -c "composer install -o -q && yarn install && yarn build"
 docker compose exec web sh -c "php bin/console doctrine:database:create && php bin/console doctrine:migrations:migrate --no-interaction && php bin/console doc:fixtures:load --no-interaction --purge-with-truncate"
 ```
 

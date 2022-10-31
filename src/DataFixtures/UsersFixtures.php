@@ -4,11 +4,12 @@ namespace App\DataFixtures;
 
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class UsersFixtures extends Fixture implements ContainerAwareInterface
+class UsersFixtures extends Fixture implements ContainerAwareInterface, OrderedFixtureInterface
 {
     private ContainerInterface $container;
 
@@ -21,6 +22,7 @@ class UsersFixtures extends Fixture implements ContainerAwareInterface
             ->setRoles(['ROLE_ADMIN']);
 
         $manager->persist($adminUser);
+        $this->addReference('user_admin', $adminUser);
 
         $kernel = $this->container->get('kernel');
         if ('test' === $kernel->getEnvironment()) {
@@ -31,20 +33,19 @@ class UsersFixtures extends Fixture implements ContainerAwareInterface
                 ->setRoles(['ROLE_USER']);
 
             $manager->persist($testUser);
+            $this->addReference('user_test', $testUser);
         }
 
         $manager->flush();
     }
 
-	/**
-	 * Sets the container.
-	 *
-	 * @param \Symfony\Component\DependencyInjection\ContainerInterface|null $container
-	 *
-	 * @return mixed
-	 */
 	function setContainer(ContainerInterface $container = null): void
     {
         $this->container = $container;
+	}
+
+	function getOrder(): int
+    {
+        return 100;
 	}
 }

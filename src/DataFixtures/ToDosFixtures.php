@@ -8,10 +8,14 @@ use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 use Faker\Generator;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class ToDosFixtures extends Fixture implements OrderedFixtureInterface
+class ToDosFixtures extends Fixture implements ContainerAwareInterface, OrderedFixtureInterface
 {
     const DEFAULT_TODOS_COUNT = 20;
+
+    private ContainerInterface $container;
 
     private Generator $faker;
 
@@ -22,12 +26,14 @@ class ToDosFixtures extends Fixture implements OrderedFixtureInterface
 
     public function load(ObjectManager $manager): void
     {
+        $kernel = $this->container->get('kernel');
+
         foreach (range(1, self::DEFAULT_TODOS_COUNT) as $i) {
-            $todo = $this->instanceToDo();
+            $todo = $this->instanceToDo($kernel->getEnvironment());
 
             $randSubtasks = $this->faker->numberBetween(0, 5);
             for($i = 0; $i < $randSubtasks; $i++) {
-                $subtask = $this->instanceToDo();
+                $subtask = $this->instanceToDo($kernel->getEnvironment());
                 $manager->persist($subtask);
 
                 $todo->addSubtask($subtask);
@@ -39,7 +45,7 @@ class ToDosFixtures extends Fixture implements OrderedFixtureInterface
         $manager->flush();
     }
 
-    private function instanceToDo(): ToDo
+    private function instanceToDo(string $env): ToDo
     {
         $todo = new ToDo();
         $todo->setTitle($this->faker->text(128));
@@ -51,8 +57,19 @@ class ToDosFixtures extends Fixture implements OrderedFixtureInterface
             $todo->addTag($this->getReference($tagName));
         }
 
+        if ('test' === $env) {
+            $todo->setOwner($this->getReference('user_test'));
+        } else {
+            $todo->setOwner($this->getReference('user_admin'));
+        }
+
         return $todo;
     }
+
+	function setContainer(ContainerInterface $container = null): void
+    {
+        $this->container = $container;
+	}
 
     public function getOrder(): int
     {
